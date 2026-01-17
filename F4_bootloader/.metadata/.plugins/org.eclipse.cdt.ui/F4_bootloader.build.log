@@ -1,0 +1,10 @@
+10:14:29 **** Incremental Build of configuration Debug for project F4_bootloader ****
+make -j16 all 
+arm-none-eabi-size  F4_bootloader.elf 
+   text	   data	    bss	    dec	    hex	filename
+  21976	    140	   2004	  24120	   5e38	F4_bootloader.elf
+Finished building: default.size.stdout
+ 
+
+10:14:30 Build Finished. 0 errors, 0 warnings. (took 193ms)
+

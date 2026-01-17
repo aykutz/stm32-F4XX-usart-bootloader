@@ -1,0 +1,563 @@
+/*
+ * bootloader.c
+ *
+ *  Created on: Jan 14, 2026
+ *      Author: huse2
+ */
+
+#include "bootloader.h"
+
+extern char messageBuffer[BUFFER_SIZE];
+extern uint8_t bufferIndex;
+extern UART_HandleTypeDef huart2;
+
+extern uint32_t gotoAddress;
+extern uint8_t gotoAddressFlag;
+extern uint8_t counterTest;
+
+void processBootloaderCommand(void) {
+	uint8_t command = messageBuffer[2];
+
+	switch (command) {
+	case GET_VERSION:
+		handleGetVersion();
+		break;
+	case GET_HELP:
+		handleGetHelp();
+		break;
+	case GET_ID:
+		handleGetID();
+		break;
+	case READ_MEMORY:
+		handleReadMemory();
+		break;
+	case GO_TO_ADDRESS:
+		handleGoToAddress();
+		break;
+	case WRITE_MEMORY:
+		handleWriteData2Memory();
+		break;
+	case ERASE:
+		handleErase();
+		break;
+	case WRITE_PROTECT_UNPROTECT:
+		handleWrite_Protect_Unprotect();
+		break;
+	case READOUT_PROTECT_UNPROTECT:
+		handleReadOut_Protect_Unprotect();
+		break;
+	default:
+		break;
+	}
+	bufferIndex = 0;
+	memset(messageBuffer, 0, BUFFER_SIZE);
+
+}
+void handleGetVersion(void) {
+	uint8_t response[2] = { 0 };
+	if (BOOTLOADER_VERSION > 0 && BOOTLOADER_VERSION <= 255) {
+		response[0] = ACK;
+		response[1] = BOOTLOADER_VERSION;
+	} else {
+		response[0] = NACK;
+		response[1] = UNKNOWN;
+	}
+#ifdef PRINT_DEBUG
+	printf("bootloader version -> 0x%x \r\n", BOOTLOADER_VERSION);
+#endif
+	HAL_UART_Transmit(UART_PORT, response, sizeof(response), HAL_MAX_DELAY);
+
+}
+
+void handleGetHelp(void) {
+	uint8_t commands[] = {
+	GET_HELP,					//					0x00
+			GET_VERSION,				//					0x01
+			GET_ID,						//			0x02
+			READ_MEMORY,				//					0x11
+			GO_TO_ADDRESS,				//				0x21
+			WRITE_MEMORY,				//				0x31
+			ERASE,						//						0x43
+			WRITE_PROTECT_UNPROTECT,	//		0x63
+			READOUT_PROTECT_UNPROTECT,	//	0x82
+			GET_CHECKSUM,				//				0xA1
+			};
+	uint8_t totalCommands = sizeof(commands) / sizeof(commands[0]);
+
+	uint8_t response[1 + 1 + 1 + sizeof(commands)] = { 0 };
+	response[0] = ACK;
+	response[1] = totalCommands;
+	response[2] = BOOTLOADER_VERSION;
+	memcpy(&response[3], commands, totalCommands);
+
+	HAL_UART_Transmit(UART_PORT, response, sizeof(response), HAL_MAX_DELAY);
+
+}
+
+void handleGetID(void) {
+	uint8_t response[4] = { 0 };
+	uint32_t IDCode = DBGMCU->IDCODE;
+	uint8_t PIDLSB = IDCode & 0xFF;
+
+	response[0] = ACK;
+	response[1] = 0x01;
+	response[2] = 0x04;
+	response[3] = PIDLSB;
+
+	HAL_UART_Transmit(UART_PORT, response, sizeof(response), HAL_MAX_DELAY);
+}
+
+void handleReadMemory(void) {
+
+	uint8_t response[1] = { 0 };
+	uint8_t offset = 3;
+
+	uint32_t address = (messageBuffer[offset] << 24)
+			| (messageBuffer[offset + 1] << 16)
+			| (messageBuffer[offset + 2] << 8) | (messageBuffer[offset + 3]);
+
+	uint8_t addressCheckSum = messageBuffer[offset + 4];
+	uint8_t calculatedCheckSum = (messageBuffer[offset])
+			^ (messageBuffer[offset + 1]) ^ (messageBuffer[offset + 2])
+			^ (messageBuffer[offset + 3]);
+	if (addressCheckSum != calculatedCheckSum) {
+		response[0] = NACK;
+		HAL_UART_Transmit(UART_PORT, response, sizeof(response), HAL_MAX_DELAY);
+		return;
+	}
+
+	uint8_t N = messageBuffer[offset + 5];
+	uint8_t Ncomplement = messageBuffer[offset + 6];
+
+	if ((uint8_t) (N ^ Ncomplement) != 0XFF) {
+		response[0] = NACK;
+		HAL_UART_Transmit(UART_PORT, response, sizeof(response), HAL_MAX_DELAY);
+		return;
+	}
+
+	uint8_t addressIsValid = verifyAddress(address);
+
+	if (!addressIsValid) {
+		response[0] = NACK;
+		HAL_UART_Transmit(UART_PORT, response, sizeof(response), HAL_MAX_DELAY);
+		return;
+	}
+
+	response[0] = ACK;
+	HAL_UART_Transmit(UART_PORT, response, sizeof(response), HAL_MAX_DELAY);
+
+	uint8_t numberOfBytes = N;
+	uint8_t buffer[256];
+	memcpy(buffer, (uint8_t*) address, numberOfBytes);
+	HAL_UART_Transmit(UART_PORT, buffer, numberOfBytes, HAL_MAX_DELAY);
+
+}
+
+void handleGoToAddress(void) {
+	uint8_t response[1] = { 0 };
+	uint8_t offset = 3;
+
+	uint32_t address = (messageBuffer[offset] << 24)
+			| (messageBuffer[offset + 1] << 16)
+			| (messageBuffer[offset + 2] << 8) | (messageBuffer[offset + 3]);
+
+	uint8_t addressCheckSum = messageBuffer[offset + 4];
+	uint8_t calculatedCheckSum = (messageBuffer[offset])
+			^ (messageBuffer[offset + 1]) ^ (messageBuffer[offset + 2])
+			^ (messageBuffer[offset + 3]);
+
+	if (addressCheckSum != calculatedCheckSum) {
+		response[0] = NACK;
+		HAL_UART_Transmit(UART_PORT, response, sizeof(response), HAL_MAX_DELAY);
+		return;
+	}
+
+	uint8_t addressIsValid = verifyAddress(address);
+	if (!addressIsValid) {
+		response[0] = NACK;
+		HAL_UART_Transmit(UART_PORT, response, sizeof(response), HAL_MAX_DELAY);
+		return;
+	}
+
+	response[0] = ACK;
+	HAL_UART_Transmit(UART_PORT, response, sizeof(response), HAL_MAX_DELAY);
+
+	gotoAddress = address;
+	gotoAddressFlag = 1;
+
+	/* typedef void (*Function_Pointer)(void);
+	 uint32_t sp = *((volatile uint32_t*) address);
+	 uint32_t pc = *((volatile uint32_t*) (address + 4));
+
+	 __set_MSP(sp);
+
+	 Function_Pointer app_start = (Function_Pointer) pc;
+	 app_start();*/
+}
+
+void handleWriteData2Memory(void) {
+
+	uint8_t response[1] = { 0 };
+	uint8_t offset = 3;
+
+	uint32_t address = (messageBuffer[offset] << 24)
+			| (messageBuffer[offset + 1] << 16)
+			| (messageBuffer[offset + 2] << 8) | (messageBuffer[offset + 3]);
+
+	uint8_t addressCheckSum = messageBuffer[offset + 4];
+	uint8_t calculatedCheckSum = (messageBuffer[offset])
+			^ (messageBuffer[offset + 1]) ^ (messageBuffer[offset + 2])
+			^ (messageBuffer[offset + 3]);
+
+	// DEBUG: Adres kontrolü
+	if (addressCheckSum != calculatedCheckSum) {
+		response[0] = NACK;
+		HAL_UART_Transmit(UART_PORT, response, sizeof(response), HAL_MAX_DELAY);
+		return; // BURADAN ÇIKIYOR MU?
+	}
+
+	uint8_t addressIsValid = verifyAddress(address);
+	if (!addressIsValid) {
+		response[0] = NACK;
+		HAL_UART_Transmit(UART_PORT, response, sizeof(response), HAL_MAX_DELAY);
+		return; // YOKSA BURADAN MI?
+	}
+
+	uint32_t totalLength = (messageBuffer[offset + 5] << 24)
+			| (messageBuffer[offset + 6] << 16)
+			| (messageBuffer[offset + 7] << 8) | (messageBuffer[offset + 8]);
+
+	// İLK ACK GÖNDER - BU ÇOK ÖNEMLİ!
+	response[0] = ACK;
+	HAL_UART_Transmit(UART_PORT, response, sizeof(response), HAL_MAX_DELAY);
+
+	bufferIndex = 0;
+	memset(messageBuffer, 0, BUFFER_SIZE);
+
+	uint32_t offsetData = 0;
+	while (offsetData < totalLength) {
+		uint8_t N;
+
+		if (HAL_UART_Receive(UART_PORT, &N, 1, HAL_MAX_DELAY) != HAL_OK) {
+			response[0] = NACK;
+			HAL_UART_Transmit(UART_PORT, response, 1, HAL_MAX_DELAY);
+			return;
+		}
+
+		uint32_t dataLength = N + 1;
+		uint8_t buffer[258]; // 256 + 1 idi 256 + 2 yaptım
+
+		if (HAL_UART_Receive(UART_PORT, buffer, dataLength + 1, HAL_MAX_DELAY)
+				!= HAL_OK) {
+			response[0] = NACK;
+			HAL_UART_Transmit(UART_PORT, response, 1, HAL_MAX_DELAY);
+			return;
+		}
+
+		uint8_t calculatedCheckSum = N;
+		for (uint32_t i = 0; i < dataLength; i++) {
+			calculatedCheckSum ^= buffer[i];
+		}
+
+		uint8_t receivedChecksum = buffer[dataLength];
+		if (receivedChecksum != calculatedCheckSum) {
+			response[0] = NACK;
+			HAL_UART_Transmit(UART_PORT, response, 1, HAL_MAX_DELAY);
+			return;
+		}
+
+		if (flashWrite(address, buffer, dataLength) == HAL_OK) {
+			address += dataLength;
+			offsetData += dataLength;
+			response[0] = ACK;
+			HAL_UART_Transmit(UART_PORT, response, 1, HAL_MAX_DELAY);
+		} else {
+			response[0] = NACK;
+			HAL_UART_Transmit(UART_PORT, response, 1, HAL_MAX_DELAY);
+			return;
+		}
+	}
+}
+
+void handleErase(void) {
+	uint8_t response[1] = { 0 };
+	uint8_t offset = 3;
+	uint8_t N = messageBuffer[offset];
+	uint8_t receivedCheckSum = N;
+	uint8_t calculatedCheckSum = N;
+
+	if (N == 0xFF) {
+		receivedCheckSum = messageBuffer[offset + 1];
+		calculatedCheckSum = 0xFF ^ 0x00;
+		if (receivedCheckSum != calculatedCheckSum) {
+			response[0] = NACK;
+			HAL_UART_Transmit(UART_PORT, response, sizeof(response),
+			HAL_MAX_DELAY);
+			return;
+		}
+		HAL_FLASH_Unlock();
+
+		FLASH_EraseInitTypeDef eraseInit;
+		uint32_t sectorError;
+
+		eraseInit.TypeErase = FLASH_TYPEERASE_MASSERASE;
+		eraseInit.VoltageRange = FLASH_VOLTAGE_RANGE_3;
+		eraseInit.Sector = FLASH_SECTOR_0;
+		eraseInit.NbSectors = 8;
+
+		response[0] = ACK;
+		HAL_UART_Transmit(UART_PORT, response, sizeof(response),
+		HAL_MAX_DELAY);
+		if (HAL_FLASHEx_Erase(&eraseInit, &sectorError) != HAL_OK) {
+			response[0] = NACK;
+			HAL_UART_Transmit(UART_PORT, response, sizeof(response),
+			HAL_MAX_DELAY);
+		}
+
+		HAL_FLASH_Lock();
+		return;
+	}
+
+	for (int i = 1; i <= N + 1; i++) {
+		calculatedCheckSum ^= messageBuffer[i + offset];
+	}
+	receivedCheckSum = messageBuffer[N + 2 + offset];
+
+	if (calculatedCheckSum != receivedCheckSum) {
+		response[0] = NACK;
+		HAL_UART_Transmit(UART_PORT, response, sizeof(response),
+		HAL_MAX_DELAY);
+		return;
+	}
+
+	HAL_FLASH_Unlock();
+
+	FLASH_EraseInitTypeDef eraseInit;
+	uint32_t sectorError;
+
+	eraseInit.TypeErase = FLASH_TYPEERASE_SECTORS;
+	eraseInit.VoltageRange = FLASH_VOLTAGE_RANGE_3;
+	eraseInit.NbSectors = 1;
+
+	for (int i = 1; i <= N + 1; i++) {
+		uint8_t sectorNumber = messageBuffer[i + offset];
+
+		if (sectorNumber > F401RE_NUMBEROFSECTOR)
+			continue;
+
+		eraseInit.Sector = sectorNumber;
+
+		if (HAL_FLASHEx_Erase(&eraseInit, &sectorError) != HAL_OK) {
+			response[0] = NACK;
+			HAL_UART_Transmit(UART_PORT, response, sizeof(response),
+			HAL_MAX_DELAY);
+			HAL_FLASH_Lock();
+			return;
+		}
+	}
+
+	HAL_FLASH_Lock();
+
+	response[0] = ACK;
+	HAL_UART_Transmit(UART_PORT, response, sizeof(response),
+	HAL_MAX_DELAY);
+}
+
+void handleWrite_Protect_Unprotect(void){
+	uint8_t response[1] = { 0 };
+	uint8_t offset = 3;
+	uint8_t numSectors = messageBuffer[offset] + 1;
+	uint8_t *sectorCodes = (uint8_t*) &messageBuffer[offset + 1];
+
+	HAL_FLASH_OB_Unlock();
+
+	FLASH_OBProgramInitTypeDef obInit;
+	HAL_FLASHEx_OBGetConfig(&obInit);
+
+	obInit.OptionType = OPTIONBYTE_WRP;
+	obInit.WRPSector = 0xFF;  // All sector unprotect
+	obInit.WRPState = OB_WRPSTATE_DISABLE;
+	HAL_FLASHEx_OBProgram(&obInit);
+
+	uint8_t wrpMask = 0;
+	for (uint8_t i = 0; i < numSectors; i++) {
+		uint8_t sector = sectorCodes[i];
+		if (sector < 8) {
+			wrpMask |= (1 << sector);
+		}
+	}
+
+	if (wrpMask > 0) {
+		obInit.OptionType = OPTIONBYTE_WRP;
+		obInit.WRPSector = wrpMask;
+		obInit.WRPState = OB_WRPSTATE_ENABLE;
+
+		if (HAL_FLASHEx_OBProgram(&obInit) != HAL_OK) {
+			response[0] = NACK;
+			HAL_UART_Transmit(UART_PORT, response, sizeof(response),
+			HAL_MAX_DELAY);
+			HAL_FLASH_OB_Lock();
+			return;
+		}
+	}
+
+	response[0] = ACK;
+	HAL_UART_Transmit(UART_PORT, response, sizeof(response),
+	HAL_MAX_DELAY);
+	HAL_FLASH_OB_Launch();
+
+}
+
+void handleReadOut_Protect_Unprotect(void){
+	uint8_t response[1] = { 0 };
+	uint8_t offset = 3;
+	uint8_t rdpLevel = 0xAA;
+	rdpLevel = messageBuffer[offset];
+
+	// for security
+	if (rdpLevel == 0xCC) {
+		rdpLevel = 0xAA;
+	}
+
+	HAL_FLASH_OB_Unlock();
+	FLASH_OBProgramInitTypeDef obInit;
+	HAL_FLASHEx_OBGetConfig(&obInit);
+
+	if (rdpLevel == 0xAA) {
+		obInit.RDPLevel = OB_RDP_LEVEL0;
+	} else if (rdpLevel == 0xBB) {
+		obInit.RDPLevel = OB_RDP_LEVEL1;
+	} else if (rdpLevel == 0xCC) {
+		obInit.RDPLevel = OB_RDP_LEVEL2;
+	} else {
+		response[0] = NACK;
+		HAL_UART_Transmit(UART_PORT, response, sizeof(response),
+		HAL_MAX_DELAY);
+		return;
+	}
+
+	if (HAL_FLASHEx_OBProgram(&obInit) != HAL_OK) {
+		response[0] = NACK;
+		HAL_UART_Transmit(UART_PORT, response, sizeof(response),
+		HAL_MAX_DELAY);
+		HAL_FLASH_OB_Lock();
+		return;
+	}
+
+	response[0] = ACK;
+	HAL_UART_Transmit(UART_PORT, response, sizeof(response),
+	HAL_MAX_DELAY);
+	HAL_FLASH_OB_Launch();
+
+}
+
+HAL_StatusTypeDef flashWrite(uint32_t address, uint8_t *data,
+		uint32_t dataLength) {
+
+
+/* BYTE YAZMA İŞLEMİ */
+	HAL_FLASH_Unlock();
+
+	for (uint32_t i = 0; i < dataLength; i++) {
+		if (HAL_FLASH_Program(FLASH_TYPEPROGRAM_BYTE, address + i, data[i])
+				!= HAL_OK) {
+			HAL_FLASH_Lock();
+			return HAL_ERROR;
+		}
+	}
+	HAL_FLASH_Lock();
+	return HAL_OK;
+
+
+
+/* BYTE YERINE WORD YAZMA İŞLEMİ */
+	// İKİ YÖNTEMDE ÇALIŞIYOR
+
+/*
+	HAL_StatusTypeDef status = HAL_OK;
+	HAL_FLASH_Unlock();
+
+	__HAL_FLASH_CLEAR_FLAG(FLASH_FLAG_EOP | FLASH_FLAG_OPERR | FLASH_FLAG_WRPERR |
+							   FLASH_FLAG_PGAERR | FLASH_FLAG_PGPERR | FLASH_FLAG_PGSERR);
+	uint32_t i = 0;
+
+	while (i < dataLength) {
+		// Önce WORD (4 byte) yazmayı dene
+		if ((dataLength - i) >= 4 && (address % 4 == 0)) {
+			// 4 byte'ı birleştirip WORD olarak yaz
+			uint32_t word = ((uint32_t) data[i]) | ((uint32_t) data[i + 1] << 8)
+					| ((uint32_t) data[i + 2] << 16)
+					| ((uint32_t) data[i + 3] << 24);
+
+			if (HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD, address, word)
+					!= HAL_OK) {
+
+				status = HAL_ERROR;
+				break;
+			}
+			address += 4;
+			i += 4;
+		}
+		// WORD yazamıyorsak HALFWORD (2 byte) yaz
+		else if ((dataLength - i) >= 2 && (address % 2 == 0)) {
+			uint16_t halfword = ((uint16_t) data[i])
+					| ((uint16_t) data[i + 1] << 8);
+
+			if (HAL_FLASH_Program(FLASH_TYPEPROGRAM_HALFWORD, address, halfword)
+					!= HAL_OK) {
+				status = HAL_ERROR;
+				break;
+			}
+			address += 2;
+			i += 2;
+		}
+		// Tek byte kaldıysa padding ile HALFWORD yaz
+		else {
+			// Son byte'ı 0xFF ile padding yap
+			uint16_t halfword = ((uint16_t) data[i]) | 0xFF00;
+
+			if (HAL_FLASH_Program(FLASH_TYPEPROGRAM_HALFWORD, address, halfword)
+					!= HAL_OK) {
+				status = HAL_ERROR;
+				break;
+			}
+			address += 2;
+			i += 1;
+		}
+	}
+
+	HAL_FLASH_Lock();
+	return status;    */
+}
+
+uint8_t verifyAddress(uint32_t address) {
+	if ((address >= FLASH_BASE && address <= FLASH_END)
+			|| (address >= SRAM1_BASE && address <= SRAM1_END)) {
+		return 1;
+	}
+
+	return 0;
+
+}
+
+void handleResetOperation(void) {
+	counterTest++;
+	HAL_NVIC_SystemReset();
+}
+
+uint8_t calculateCRC(char *data, uint16_t startIndex, uint16_t length) {
+	uint8_t crc = 0x00;
+	for (uint16_t i = 0; i < length; i++) {
+		crc ^= (uint8_t) data[startIndex + i];
+	}
+	return crc;
+}
+
+void handleUnKnownCommand(void) {
+
+	uint8_t response[1] = { 0 };
+
+	response[0] = UNKNOWN;             // UNKNOWN
+	HAL_UART_Transmit(UART_PORT, response, sizeof(response), HAL_MAX_DELAY);
+
+}

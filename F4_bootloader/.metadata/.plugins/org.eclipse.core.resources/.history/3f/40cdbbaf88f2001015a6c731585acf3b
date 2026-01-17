@@ -1,0 +1,285 @@
+/*
+ * bootloader.c
+ *
+ *  Created on: Jan 14, 2026
+ *      Author: huse2
+ */
+
+#include "bootloader.h"
+
+extern char messageBuffer[BUFFER_SIZE];
+extern uint8_t bufferIndex;
+extern UART_HandleTypeDef huart2;
+
+void processBootloaderCommand(void) {
+	uint8_t command = messageBuffer[2];
+
+	switch (command) {
+	case GET_VERSION:
+		handleGetVersion();
+		break;
+	case GET_HELP:
+		handleGetHelp();
+		break;
+	case GET_ID:
+		handleGetID();
+		break;
+	case READ_MEMORY:
+		handleReadMemory();
+		break;
+	case GO_TO_ADDRESS:
+		handleGoToAddress();
+		break;
+	case WRITE_MEMORY:
+		handleWriteData2Memory();
+		break;
+	default:
+		break;
+	}
+	bufferIndex = 0;
+	memset(messageBuffer, 0, BUFFER_SIZE);
+
+}
+void handleGetVersion(void) {
+	uint8_t response[2] = { 0 };
+	if (BOOTLOADER_VERSION > 0 && BOOTLOADER_VERSION <= 255) {
+		response[0] = ACK;
+		response[1] = BOOTLOADER_VERSION;
+	} else {
+		response[0] = NACK;
+		response[1] = UNKNOWN;
+	}
+#ifdef PRINT_DEBUG
+	printf("bootloader version -> 0x%x \r\n", BOOTLOADER_VERSION);
+#endif
+	HAL_UART_Transmit(UART_PORT, response, sizeof(response), HAL_MAX_DELAY);
+
+}
+
+void handleGetHelp(void) {
+	uint8_t commands[] = {
+	GET_HELP,					//					0x00
+			GET_VERSION,				//					0x01
+			GET_ID,						//			0x02
+			READ_MEMORY,				//					0x11
+			GO_TO_ADDRESS,				//				0x21
+			WRITE_MEMORY,				//				0x31
+			ERASE,						//						0x43
+			WRITE_PROTECT_UNPROTECT,	//		0x63
+			READOUT_PROTECT_UNPROTECT,	//	0x82
+			GET_CHECKSUM,				//				0xA1
+			};
+	uint8_t totalCommands = sizeof(commands) / sizeof(commands[0]);
+
+	uint8_t response[1 + 1 + 1 + sizeof(commands)] = { 0 };
+	response[0] = ACK;
+	response[1] = totalCommands;
+	response[2] = BOOTLOADER_VERSION;
+	memcpy(&response[3], commands, totalCommands);
+
+	HAL_UART_Transmit(UART_PORT, response, sizeof(response), HAL_MAX_DELAY);
+
+}
+
+void handleGetID(void) {
+	uint8_t response[4] = { 0 };
+	uint32_t IDCode = DBGMCU->IDCODE;
+	uint8_t PIDLSB = IDCode & 0xFF;
+
+	response[0] = ACK;
+	response[1] = 0x01;
+	response[2] = 0x04;
+	response[3] = PIDLSB;
+
+	HAL_UART_Transmit(UART_PORT, response, sizeof(response), HAL_MAX_DELAY);
+}
+
+void handleReadMemory(void) {
+
+	uint8_t response[1] = { 0 };
+	uint8_t offset = 3;
+
+	uint32_t address = (messageBuffer[offset] << 24)
+			| (messageBuffer[offset + 1] << 16)
+			| (messageBuffer[offset + 2] << 8) | (messageBuffer[offset + 3]);
+
+	uint8_t addressCheckSum = messageBuffer[offset + 4];
+	uint8_t calculatedCheckSum = (messageBuffer[offset])
+			^ (messageBuffer[offset + 1]) ^ (messageBuffer[offset + 2])
+			^ (messageBuffer[offset + 3]);
+	if (addressCheckSum != calculatedCheckSum) {
+		response[0] = NACK;
+		HAL_UART_Transmit(UART_PORT, response, sizeof(response), HAL_MAX_DELAY);
+		return;
+	}
+
+	uint8_t N = messageBuffer[offset + 5];
+	uint8_t Ncomplement = messageBuffer[offset + 6];
+
+	if ((uint8_t) (N ^ Ncomplement) != 0XFF) {
+		response[0] = NACK;
+		HAL_UART_Transmit(UART_PORT, response, sizeof(response), HAL_MAX_DELAY);
+		return;
+	}
+
+	uint8_t addressIsValid = verifyAddress(address);
+
+	if (!addressIsValid) {
+		response[0] = NACK;
+		HAL_UART_Transmit(UART_PORT, response, sizeof(response), HAL_MAX_DELAY);
+		return;
+	}
+
+	response[0] = ACK;
+	HAL_UART_Transmit(UART_PORT, response, sizeof(response), HAL_MAX_DELAY);
+
+	uint8_t numberOfBytes = N;
+	uint8_t buffer[256];
+	memcpy(buffer, (uint8_t*) address, numberOfBytes);
+	HAL_UART_Transmit(UART_PORT, buffer, numberOfBytes, HAL_MAX_DELAY);
+
+}
+
+void handleGoToAddress(void) {
+	uint8_t response[1] = { 0 };
+
+	uint8_t offset = 3;
+
+	uint32_t address = (messageBuffer[offset] << 24)
+			| (messageBuffer[offset + 1] << 16)
+			| (messageBuffer[offset + 2] << 8) | (messageBuffer[offset + 3]);
+
+	uint8_t addressCheckSum = messageBuffer[offset + 4];
+	uint8_t calculatedCheckSum = (messageBuffer[offset])
+			^ (messageBuffer[offset + 1]) ^ (messageBuffer[offset + 2])
+			^ (messageBuffer[offset + 3]);
+	if (addressCheckSum != calculatedCheckSum) {
+		response[0] = NACK;
+		HAL_UART_Transmit(UART_PORT, response, sizeof(response), HAL_MAX_DELAY);
+		return;
+	}
+	uint8_t addressIsValid = verifyAddress(address);
+
+	if (!addressIsValid) {
+		response[0] = NACK;
+		HAL_UART_Transmit(UART_PORT, response, sizeof(response), HAL_MAX_DELAY);
+		return;
+	}
+
+	response[0] = ACK;
+	HAL_UART_Transmit(UART_PORT, response, sizeof(response), HAL_MAX_DELAY);
+
+	typedef void (*Function_Pointer)(void);
+	uint32_t sp = *((volatile uint32_t*) address);
+	uint32_t pc = *((volatile uint32_t*) (address + 4));
+
+	__set_MSP(sp);
+
+	Function_Pointer app_start = (Function_Pointer) pc;
+	app_start();
+}
+
+void handleWriteData2Memory(void) {
+	uint8_t response[1] = { 0 };
+	uint8_t offset = 3;
+
+	uint32_t address = (messageBuffer[offset] << 24)
+			| (messageBuffer[offset + 1] << 16)
+			| (messageBuffer[offset + 2] << 8) | (messageBuffer[offset + 3]);
+
+	uint8_t addressCheckSum = messageBuffer[offset + 4];
+	uint8_t calculatedCheckSum = (messageBuffer[offset])
+			^ (messageBuffer[offset + 1]) ^ (messageBuffer[offset + 2])
+			^ (messageBuffer[offset + 3]);
+	if (addressCheckSum != calculatedCheckSum) {
+		response[0] = NACK;
+		HAL_UART_Transmit(UART_PORT, response, sizeof(response), HAL_MAX_DELAY);
+		return;
+	}
+
+	uint8_t addressIsValid = verifyAddress(address);
+	if (!addressIsValid) {
+		response[0] = NACK;
+		HAL_UART_Transmit(UART_PORT, response, sizeof(response), HAL_MAX_DELAY);
+		return;
+	}
+
+	uint32_t totalLength = (messageBuffer[offset + 5] << 24)
+			| (messageBuffer[offset + 6] << 16)
+			| (messageBuffer[offset + 7] << 8) | (messageBuffer[offset + 8]);
+
+	bufferIndex = 0;
+	memset(messageBuffer, 0, BUFFER_SIZE);
+	response[0] = ACK;
+	HAL_UART_Transmit(UART_PORT, response, sizeof(response), HAL_MAX_DELAY);
+
+	uint32_t offsetData = 0;
+	uint32_t buffer[258];
+
+	while (offset < totalLength) {
+
+		if (HAL_UART_Receive(UART_PORT, buffer, 258, HAL_MAX_DELAY) != HAL_OK) {
+			response[0] = NACK;
+			HAL_UART_Transmit(UART_PORT, response, sizeof(response),
+			HAL_MAX_DELAY);
+			return;
+		}
+
+		uint8_t buffer[0];
+		uint32_t dataLength = N + 1;
+
+		uint8_t dataCheckSum = buffer[dataLength + 1];
+		uint8_t calculatedDataCheckSum = N;
+		for (int i = 1; i <= dataLength; i++) {
+			calculatedDataCheckSum ^= buffer[i];
+		}
+		if (dataCheckSum != calculatedDataCheckSum) {
+			response[0] = NACK;
+			HAL_UART_Transmit(UART_PORT, response, sizeof(response),
+			HAL_MAX_DELAY);
+			return;
+		}
+
+		if (flashWrite(address, &buffer[1], dataLength) == HAL_OK) {
+			response[0] = ACK;
+			HAL_UART_Transmit(UART_PORT, response, sizeof(response),
+			HAL_MAX_DELAY);
+			address += dataLength;
+			offsetData += dataLength;
+		} else {
+			response[0] = NACK;
+			HAL_UART_Transmit(UART_PORT, response, sizeof(response),
+			HAL_MAX_DELAY);
+			return;
+		}
+
+	}
+
+}
+
+
+HAL_StatusTypeDefB flashWrite(uint32_t address, uint8_t* data, uint32_t dataLength){
+	HAL_FLASH_Unlock();
+	for(uint32_t i = 0; i<dataLengthlength ; i++){
+		if(HAL_FLASH_Program(FLASH_TYPEPROGRAM_BYTE, address+i, data[i])!= HAL_OK){
+			HAL_FLASH_Lock();
+			return HAL_ERROR;
+		}
+	}
+	HAL_FLASH_Lock();
+	return HAL_OK;
+}
+
+
+
+
+uint8_t verifyAddress(uint32_t address) {
+	if ((address >= FLASH_BASE && address <= FLASH_END)
+			|| (address >= SRAM1_BASE && address <= SRAM1_END)) {
+		return 1;
+	}
+
+	return 0;
+
+}
+

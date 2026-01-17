@@ -1,0 +1,2 @@
+D:\F4_bootloader\ProgramSetup\stm32F4_programmer.pdb
+D:\F4_bootloader\ProgramSetup\stm32F4_programmer.exe

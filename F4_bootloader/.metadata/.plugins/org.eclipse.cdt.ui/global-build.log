@@ -1,0 +1,978 @@
+07:01:24 **** Incremental Build of configuration Debug for project F4_application ****
+make -j16 all 
+arm-none-eabi-gcc -o "F4_application.elf" @"objects.list"   -mcpu=cortex-m4 -T"D:\F4_bootloader\F4_application\STM32F401RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="F4_application.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: F4_application.elf
+ 
+arm-none-eabi-size  F4_application.elf 
+arm-none-eabi-objdump -h -S F4_application.elf  > "F4_application.list"
+arm-none-eabi-objcopy  -O ihex F4_application.elf  "F4_application.hex"
+   text	   data	    bss	    dec	    hex	filename
+   8388	     40	   1640	  10068	   2754	F4_application.elf
+arm-none-eabi-objcopy  -O binary F4_application.elf  "F4_application.bin"
+Finished building: default.size.stdout
+ 
+Finished building: F4_application.list
+ 
+Finished building: F4_application.hex
+Finished building: F4_application.bin
+ 
+ 
+07:03:43 **** Incremental Build of configuration Debug for project F4_bootloader ****
+make -j16 all 
+arm-none-eabi-size  F4_bootloader.elf 
+   text	   data	    bss	    dec	    hex	filename
+  18888	    136	   2000	  21024	   5220	F4_bootloader.elf
+Finished building: default.size.stdout
+ 
+07:03:51 **** Incremental Build of configuration Debug for project F4_bootloader ****
+make -j16 all 
+arm-none-eabi-size  F4_bootloader.elf 
+   text	   data	    bss	    dec	    hex	filename
+  18888	    136	   2000	  21024	   5220	F4_bootloader.elf
+Finished building: default.size.stdout
+ 
+13:24:09 **** Incremental Build of configuration Debug for project F4_bootloader ****
+make -j16 all 
+arm-none-eabi-gcc "../Core/Src/bootloader.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F401xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/bootloader.d" -MT"Core/Src/bootloader.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/bootloader.o"
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F401xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/bootloader.c: In function 'handleErase':
+../Core/Src/bootloader.c:278:17: warning: unused variable 'receivedCheckSum' [-Wunused-variable]
+  278 |         uint8_t receivedCheckSum = N;
+      |                 ^~~~~~~~~~~~~~~~
+../Core/Src/bootloader.c:275:17: warning: unused variable 'response' [-Wunused-variable]
+  275 |         uint8_t response[1] = {0} ;
+      |                 ^~~~~~~~
+arm-none-eabi-gcc -o "F4_bootloader.elf" @"objects.list"   -mcpu=cortex-m4 -T"D:\F4_bootloader\F4_bootloader\STM32F401RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="F4_bootloader.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: F4_bootloader.elf
+ 
+arm-none-eabi-size  F4_bootloader.elf 
+arm-none-eabi-objdump -h -S F4_bootloader.elf  > "F4_bootloader.list"
+   text	   data	    bss	    dec	    hex	filename
+  18948	    136	   2000	  21084	   525c	F4_bootloader.elf
+Finished building: default.size.stdout
+ 
+Finished building: F4_bootloader.list
+ 
+03:00:22 **** Incremental Build of configuration Debug for project F4_bootloader ****
+make -j16 all 
+arm-none-eabi-gcc "../Core/Src/bootloader.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F401xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/bootloader.d" -MT"Core/Src/bootloader.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/bootloader.o"
+../Core/Src/bootloader.c: In function 'handleErase':
+../Core/Src/bootloader.c:337:36: error: 'F446NUMBEROFSECTOR' undeclared (first use in this function)
+  337 |                 if (sectorNumber > F446NUMBEROFSECTOR)
+      |                                    ^~~~~~~~~~~~~~~~~~
+../Core/Src/bootloader.c:337:36: note: each undeclared identifier is reported only once for each function it appears in
+make: *** [Core/Src/subdir.mk:37: Core/Src/bootloader.o] Error 1
+"make -j16 all" terminated with exit code 2. Build might be incomplete.
+03:01:35 **** Incremental Build of configuration Debug for project F4_bootloader ****
+make -j16 all 
+arm-none-eabi-gcc "../Core/Src/bootloader.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F401xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/bootloader.d" -MT"Core/Src/bootloader.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/bootloader.o"
+../Core/Src/bootloader.c: In function 'handleErase':
+../Core/Src/bootloader.c:337:36: error: 'F401NUMBEROFSECTOR' undeclared (first use in this function)
+  337 |                 if (sectorNumber > F401NUMBEROFSECTOR)
+      |                                    ^~~~~~~~~~~~~~~~~~
+../Core/Src/bootloader.c:337:36: note: each undeclared identifier is reported only once for each function it appears in
+make: *** [Core/Src/subdir.mk:37: Core/Src/bootloader.o] Error 1
+"make -j16 all" terminated with exit code 2. Build might be incomplete.
+03:03:21 **** Incremental Build of configuration Debug for project F4_bootloader ****
+make -j16 all 
+arm-none-eabi-gcc "../Core/Src/bootloader.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F401xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/bootloader.d" -MT"Core/Src/bootloader.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/bootloader.o"
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F401xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "F4_bootloader.elf" @"objects.list"   -mcpu=cortex-m4 -T"D:\F4_bootloader\F4_bootloader\STM32F401RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="F4_bootloader.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: F4_bootloader.elf
+ 
+arm-none-eabi-size  F4_bootloader.elf 
+arm-none-eabi-objdump -h -S F4_bootloader.elf  > "F4_bootloader.list"
+   text	   data	    bss	    dec	    hex	filename
+  19944	    136	   2000	  22080	   5640	F4_bootloader.elf
+Finished building: default.size.stdout
+ 
+Finished building: F4_bootloader.list
+ 
+03:03:50 **** Incremental Build of configuration Debug for project F4_bootloader ****
+make -j16 all 
+arm-none-eabi-size  F4_bootloader.elf 
+   text	   data	    bss	    dec	    hex	filename
+  19944	    136	   2000	  22080	   5640	F4_bootloader.elf
+Finished building: default.size.stdout
+ 
+03:35:54 **** Incremental Build of configuration Debug for project F4_bootloader ****
+make -j16 all 
+arm-none-eabi-size  F4_bootloader.elf 
+   text	   data	    bss	    dec	    hex	filename
+  19944	    136	   2000	  22080	   5640	F4_bootloader.elf
+Finished building: default.size.stdout
+ 
+03:39:07 **** Incremental Build of configuration Debug for project F4_bootloader ****
+make -j16 all 
+arm-none-eabi-size  F4_bootloader.elf 
+   text	   data	    bss	    dec	    hex	filename
+  19944	    136	   2000	  22080	   5640	F4_bootloader.elf
+Finished building: default.size.stdout
+ 
+03:40:24 **** Incremental Build of configuration Debug for project F4_bootloader ****
+make -j16 all 
+arm-none-eabi-size  F4_bootloader.elf 
+   text	   data	    bss	    dec	    hex	filename
+  19944	    136	   2000	  22080	   5640	F4_bootloader.elf
+Finished building: default.size.stdout
+ 
+03:59:26 **** Incremental Build of configuration Debug for project F4_bootloader ****
+make -j16 all 
+arm-none-eabi-gcc "../Core/Src/bootloader.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F401xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/bootloader.d" -MT"Core/Src/bootloader.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/bootloader.o"
+../Core/Src/bootloader.c: In function 'handleGoToAddress':
+../Core/Src/bootloader.c:175:9: error: 'gotoAddress' undeclared (first use in this function)
+  175 |         gotoAddress = address;
+      |         ^~~~~~~~~~~
+../Core/Src/bootloader.c:175:9: note: each undeclared identifier is reported only once for each function it appears in
+../Core/Src/bootloader.c:176:9: error: 'gotoAddressFlag' undeclared (first use in this function)
+  176 |         gotoAddressFlag = 1;
+      |         ^~~~~~~~~~~~~~~
+make: *** [Core/Src/subdir.mk:37: Core/Src/bootloader.o] Error 1
+"make -j16 all" terminated with exit code 2. Build might be incomplete.
+04:01:48 **** Incremental Build of configuration Debug for project F4_bootloader ****
+make -j16 all 
+arm-none-eabi-gcc "../Core/Src/bootloader.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F401xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/bootloader.d" -MT"Core/Src/bootloader.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/bootloader.o"
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F401xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "F4_bootloader.elf" @"objects.list"   -mcpu=cortex-m4 -T"D:\F4_bootloader\F4_bootloader\STM32F401RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="F4_bootloader.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: F4_bootloader.elf
+ 
+arm-none-eabi-size  F4_bootloader.elf 
+arm-none-eabi-objdump -h -S F4_bootloader.elf  > "F4_bootloader.list"
+   text	   data	    bss	    dec	    hex	filename
+  19932	    140	   2004	  22076	   563c	F4_bootloader.elf
+Finished building: default.size.stdout
+ 
+Finished building: F4_bootloader.list
+ 
+04:02:11 **** Incremental Build of configuration Debug for project F4_bootloader ****
+make -j16 all 
+arm-none-eabi-size  F4_bootloader.elf 
+   text	   data	    bss	    dec	    hex	filename
+  19932	    140	   2004	  22076	   563c	F4_bootloader.elf
+Finished building: default.size.stdout
+ 
+04:08:37 **** Incremental Build of configuration Debug for project F4_bootloader ****
+make -j16 all 
+arm-none-eabi-size  F4_bootloader.elf 
+   text	   data	    bss	    dec	    hex	filename
+  19932	    140	   2004	  22076	   563c	F4_bootloader.elf
+Finished building: default.size.stdout
+ 
+04:10:21 **** Incremental Build of configuration Debug for project F4_bootloader ****
+make -j16 all 
+arm-none-eabi-size  F4_bootloader.elf 
+   text	   data	    bss	    dec	    hex	filename
+  19932	    140	   2004	  22076	   563c	F4_bootloader.elf
+Finished building: default.size.stdout
+ 
+04:12:34 **** Incremental Build of configuration Debug for project F4_bootloader ****
+make -j16 all 
+arm-none-eabi-size  F4_bootloader.elf 
+   text	   data	    bss	    dec	    hex	filename
+  19932	    140	   2004	  22076	   563c	F4_bootloader.elf
+Finished building: default.size.stdout
+ 
+04:30:20 **** Incremental Build of configuration Debug for project F4_bootloader ****
+make -j16 all 
+arm-none-eabi-gcc "../Core/Src/bootloader.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F401xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/bootloader.d" -MT"Core/Src/bootloader.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/bootloader.o"
+arm-none-eabi-gcc -o "F4_bootloader.elf" @"objects.list"   -mcpu=cortex-m4 -T"D:\F4_bootloader\F4_bootloader\STM32F401RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="F4_bootloader.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: F4_bootloader.elf
+ 
+arm-none-eabi-size  F4_bootloader.elf 
+arm-none-eabi-objdump -h -S F4_bootloader.elf  > "F4_bootloader.list"
+   text	   data	    bss	    dec	    hex	filename
+  19932	    140	   2004	  22076	   563c	F4_bootloader.elf
+Finished building: default.size.stdout
+ 
+Finished building: F4_bootloader.list
+ 
+04:31:23 **** Incremental Build of configuration Debug for project F4_bootloader ****
+make -j16 all 
+arm-none-eabi-size  F4_bootloader.elf 
+   text	   data	    bss	    dec	    hex	filename
+  19932	    140	   2004	  22076	   563c	F4_bootloader.elf
+Finished building: default.size.stdout
+ 
+04:34:23 **** Incremental Build of configuration Debug for project F4_bootloader ****
+make -j16 all 
+arm-none-eabi-size  F4_bootloader.elf 
+   text	   data	    bss	    dec	    hex	filename
+  19932	    140	   2004	  22076	   563c	F4_bootloader.elf
+Finished building: default.size.stdout
+ 
+04:37:32 **** Incremental Build of configuration Debug for project F4_application ****
+make -j16 all 
+arm-none-eabi-size  F4_application.elf 
+   text	   data	    bss	    dec	    hex	filename
+   8388	     40	   1640	  10068	   2754	F4_application.elf
+Finished building: default.size.stdout
+ 
+04:38:08 **** Incremental Build of configuration Debug for project F4_bootloader ****
+make -j16 all 
+arm-none-eabi-size  F4_bootloader.elf 
+   text	   data	    bss	    dec	    hex	filename
+  19932	    140	   2004	  22076	   563c	F4_bootloader.elf
+Finished building: default.size.stdout
+ 
+04:40:41 **** Incremental Build of configuration Debug for project F4_bootloader ****
+make -j16 all 
+arm-none-eabi-size  F4_bootloader.elf 
+   text	   data	    bss	    dec	    hex	filename
+  19932	    140	   2004	  22076	   563c	F4_bootloader.elf
+Finished building: default.size.stdout
+ 
+04:41:27 **** Incremental Build of configuration Debug for project F4_application ****
+make -j16 all 
+arm-none-eabi-size  F4_application.elf 
+   text	   data	    bss	    dec	    hex	filename
+   8388	     40	   1640	  10068	   2754	F4_application.elf
+Finished building: default.size.stdout
+ 
+04:42:36 **** Incremental Build of configuration Debug for project F4_application ****
+make -j16 all 
+arm-none-eabi-size  F4_application.elf 
+   text	   data	    bss	    dec	    hex	filename
+   8388	     40	   1640	  10068	   2754	F4_application.elf
+Finished building: default.size.stdout
+ 
+04:44:19 **** Incremental Build of configuration Debug for project F4_bootloader ****
+make -j16 all 
+arm-none-eabi-size  F4_bootloader.elf 
+   text	   data	    bss	    dec	    hex	filename
+  19932	    140	   2004	  22076	   563c	F4_bootloader.elf
+Finished building: default.size.stdout
+ 
+04:45:03 **** Incremental Build of configuration Debug for project F4_bootloader ****
+make -j16 all 
+arm-none-eabi-size  F4_bootloader.elf 
+   text	   data	    bss	    dec	    hex	filename
+  19932	    140	   2004	  22076	   563c	F4_bootloader.elf
+Finished building: default.size.stdout
+ 
+04:46:12 **** Incremental Build of configuration Debug for project F4_bootloader ****
+make -j16 all 
+arm-none-eabi-size  F4_bootloader.elf 
+   text	   data	    bss	    dec	    hex	filename
+  19932	    140	   2004	  22076	   563c	F4_bootloader.elf
+Finished building: default.size.stdout
+ 
+04:48:42 **** Incremental Build of configuration Debug for project F4_bootloader ****
+make -j16 all 
+arm-none-eabi-size  F4_bootloader.elf 
+   text	   data	    bss	    dec	    hex	filename
+  19932	    140	   2004	  22076	   563c	F4_bootloader.elf
+Finished building: default.size.stdout
+ 
+04:48:52 **** Incremental Build of configuration Debug for project F4_bootloader ****
+make -j16 all 
+arm-none-eabi-size  F4_bootloader.elf 
+   text	   data	    bss	    dec	    hex	filename
+  19932	    140	   2004	  22076	   563c	F4_bootloader.elf
+Finished building: default.size.stdout
+ 
+04:54:28 **** Incremental Build of configuration Debug for project F4_bootloader ****
+make -j16 all 
+arm-none-eabi-gcc "../Core/Src/bootloader.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F401xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/bootloader.d" -MT"Core/Src/bootloader.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/bootloader.o"
+../Core/Src/bootloader.c: In function 'handleWriteData2Memory':
+../Core/Src/bootloader.c:261:32: error: 'startAddress' undeclared (first use in this function)
+  261 |                 if (flashWrite(startAddress, buffer, dataLength) == HAL_OK) {
+      |                                ^~~~~~~~~~~~
+../Core/Src/bootloader.c:261:32: note: each undeclared identifier is reported only once for each function it appears in
+make: *** [Core/Src/subdir.mk:37: Core/Src/bootloader.o] Error 1
+"make -j16 all" terminated with exit code 2. Build might be incomplete.
+04:54:38 **** Incremental Build of configuration Debug for project F4_bootloader ****
+make -j16 all 
+arm-none-eabi-gcc "../Core/Src/bootloader.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F401xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/bootloader.d" -MT"Core/Src/bootloader.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/bootloader.o"
+arm-none-eabi-gcc -o "F4_bootloader.elf" @"objects.list"   -mcpu=cortex-m4 -T"D:\F4_bootloader\F4_bootloader\STM32F401RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="F4_bootloader.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: F4_bootloader.elf
+ 
+arm-none-eabi-size  F4_bootloader.elf 
+arm-none-eabi-objdump -h -S F4_bootloader.elf  > "F4_bootloader.list"
+   text	   data	    bss	    dec	    hex	filename
+  19920	    140	   2004	  22064	   5630	F4_bootloader.elf
+Finished building: default.size.stdout
+ 
+Finished building: F4_bootloader.list
+ 
+04:54:40 **** Incremental Build of configuration Debug for project F4_bootloader ****
+make -j16 all 
+arm-none-eabi-size  F4_bootloader.elf 
+   text	   data	    bss	    dec	    hex	filename
+  19920	    140	   2004	  22064	   5630	F4_bootloader.elf
+Finished building: default.size.stdout
+ 
+05:56:14 **** Incremental Build of configuration Debug for project F4_bootloader ****
+make -j16 all 
+arm-none-eabi-gcc "../Core/Src/bootloader.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F401xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/bootloader.d" -MT"Core/Src/bootloader.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/bootloader.o"
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F401xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "F4_bootloader.elf" @"objects.list"   -mcpu=cortex-m4 -T"D:\F4_bootloader\F4_bootloader\STM32F401RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="F4_bootloader.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: F4_bootloader.elf
+ 
+arm-none-eabi-size  F4_bootloader.elf 
+arm-none-eabi-objdump -h -S F4_bootloader.elf  > "F4_bootloader.list"
+   text	   data	    bss	    dec	    hex	filename
+  21124	    140	   2004	  23268	   5ae4	F4_bootloader.elf
+Finished building: default.size.stdout
+ 
+Finished building: F4_bootloader.list
+ 
+05:56:50 **** Incremental Build of configuration Debug for project F4_bootloader ****
+make -j16 all 
+arm-none-eabi-gcc "../Core/Src/bootloader.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F401xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/bootloader.d" -MT"Core/Src/bootloader.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/bootloader.o"
+arm-none-eabi-gcc -o "F4_bootloader.elf" @"objects.list"   -mcpu=cortex-m4 -T"D:\F4_bootloader\F4_bootloader\STM32F401RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="F4_bootloader.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: F4_bootloader.elf
+ 
+arm-none-eabi-size  F4_bootloader.elf 
+arm-none-eabi-objdump -h -S F4_bootloader.elf  > "F4_bootloader.list"
+   text	   data	    bss	    dec	    hex	filename
+  21292	    140	   2004	  23436	   5b8c	F4_bootloader.elf
+Finished building: default.size.stdout
+ 
+Finished building: F4_bootloader.list
+ 
+05:57:53 **** Incremental Build of configuration Debug for project F4_bootloader ****
+make -j16 all 
+arm-none-eabi-gcc "../Core/Src/bootloader.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F401xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/bootloader.d" -MT"Core/Src/bootloader.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/bootloader.o"
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F401xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/bootloader.c: In function 'handleResetOperation':
+../Core/Src/bootloader.c:497:9: error: 'counterTest' undeclared (first use in this function)
+  497 |         counterTest++;
+      |         ^~~~~~~~~~~
+../Core/Src/bootloader.c:497:9: note: each undeclared identifier is reported only once for each function it appears in
+make: *** [Core/Src/subdir.mk:37: Core/Src/bootloader.o] Error 1
+make: *** Waiting for unfinished jobs....
+"make -j16 all" terminated with exit code 2. Build might be incomplete.
+05:59:31 **** Incremental Build of configuration Debug for project F4_bootloader ****
+make -j16 all 
+arm-none-eabi-gcc "../Core/Src/bootloader.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F401xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/bootloader.d" -MT"Core/Src/bootloader.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/bootloader.o"
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F401xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "F4_bootloader.elf" @"objects.list"   -mcpu=cortex-m4 -T"D:\F4_bootloader\F4_bootloader\STM32F401RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="F4_bootloader.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: F4_bootloader.elf
+ 
+arm-none-eabi-size  F4_bootloader.elf 
+arm-none-eabi-objdump -h -S F4_bootloader.elf  > "F4_bootloader.list"
+   text	   data	    bss	    dec	    hex	filename
+  21292	    140	   2004	  23436	   5b8c	F4_bootloader.elf
+Finished building: default.size.stdout
+ 
+Finished building: F4_bootloader.list
+ 
+06:00:15 **** Incremental Build of configuration Debug for project F4_bootloader ****
+make -j16 all 
+arm-none-eabi-size  F4_bootloader.elf 
+   text	   data	    bss	    dec	    hex	filename
+  21292	    140	   2004	  23436	   5b8c	F4_bootloader.elf
+Finished building: default.size.stdout
+ 
+06:13:48 **** Incremental Build of configuration Debug for project F4_bootloader ****
+make -j16 all 
+arm-none-eabi-gcc "../Core/Src/bootloader.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F401xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/bootloader.d" -MT"Core/Src/bootloader.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/bootloader.o"
+arm-none-eabi-gcc -o "F4_bootloader.elf" @"objects.list"   -mcpu=cortex-m4 -T"D:\F4_bootloader\F4_bootloader\STM32F401RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="F4_bootloader.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: F4_bootloader.elf
+ 
+arm-none-eabi-size  F4_bootloader.elf 
+arm-none-eabi-objdump -h -S F4_bootloader.elf  > "F4_bootloader.list"
+   text	   data	    bss	    dec	    hex	filename
+  21532	    140	   2004	  23676	   5c7c	F4_bootloader.elf
+Finished building: default.size.stdout
+ 
+Finished building: F4_bootloader.list
+ 
+06:18:34 **** Incremental Build of configuration Debug for project F4_bootloader ****
+make -j16 all 
+arm-none-eabi-gcc "../Core/Src/bootloader.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F401xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/bootloader.d" -MT"Core/Src/bootloader.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/bootloader.o"
+../Core/Src/bootloader.c: In function 'handleWriteData2Memory':
+../Core/Src/bootloader.c:392:17: warning: "/*" within comment [-Wcomment]
+  392 |                 /*
+      |                  
+../Core/Src/bootloader.c:409:10: error: expected expression before '/' token
+  409 |         */
+      |          ^
+make: *** [Core/Src/subdir.mk:37: Core/Src/bootloader.o] Error 1
+"make -j16 all" terminated with exit code 2. Build might be incomplete.
+06:19:21 **** Incremental Build of configuration Debug for project F4_bootloader ****
+make -j16 all 
+arm-none-eabi-gcc "../Core/Src/bootloader.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F401xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/bootloader.d" -MT"Core/Src/bootloader.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/bootloader.o"
+arm-none-eabi-gcc -o "F4_bootloader.elf" @"objects.list"   -mcpu=cortex-m4 -T"D:\F4_bootloader\F4_bootloader\STM32F401RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="F4_bootloader.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: F4_bootloader.elf
+ 
+arm-none-eabi-size  F4_bootloader.elf 
+arm-none-eabi-objdump -h -S F4_bootloader.elf  > "F4_bootloader.list"
+   text	   data	    bss	    dec	    hex	filename
+  21556	    140	   2004	  23700	   5c94	F4_bootloader.elf
+Finished building: default.size.stdout
+ 
+Finished building: F4_bootloader.list
+ 
+06:19:23 **** Incremental Build of configuration Debug for project F4_bootloader ****
+make -j16 all 
+arm-none-eabi-size  F4_bootloader.elf 
+   text	   data	    bss	    dec	    hex	filename
+  21556	    140	   2004	  23700	   5c94	F4_bootloader.elf
+Finished building: default.size.stdout
+ 
+06:24:20 **** Incremental Build of configuration Debug for project F4_bootloader ****
+make -j16 all 
+arm-none-eabi-size  F4_bootloader.elf 
+   text	   data	    bss	    dec	    hex	filename
+  21556	    140	   2004	  23700	   5c94	F4_bootloader.elf
+Finished building: default.size.stdout
+ 
+06:34:45 **** Incremental Build of configuration Debug for project F4_bootloader ****
+make -j16 all 
+arm-none-eabi-gcc "../Core/Src/bootloader.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F401xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/bootloader.d" -MT"Core/Src/bootloader.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/bootloader.o"
+arm-none-eabi-gcc -o "F4_bootloader.elf" @"objects.list"   -mcpu=cortex-m4 -T"D:\F4_bootloader\F4_bootloader\STM32F401RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="F4_bootloader.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: F4_bootloader.elf
+ 
+arm-none-eabi-size  F4_bootloader.elf 
+arm-none-eabi-objdump -h -S F4_bootloader.elf  > "F4_bootloader.list"
+   text	   data	    bss	    dec	    hex	filename
+  21556	    140	   2004	  23700	   5c94	F4_bootloader.elf
+Finished building: default.size.stdout
+ 
+Finished building: F4_bootloader.list
+ 
+06:35:12 **** Incremental Build of configuration Debug for project F4_bootloader ****
+make -j16 all 
+arm-none-eabi-size  F4_bootloader.elf 
+   text	   data	    bss	    dec	    hex	filename
+  21556	    140	   2004	  23700	   5c94	F4_bootloader.elf
+Finished building: default.size.stdout
+ 
+06:39:08 **** Incremental Build of configuration Debug for project F4_bootloader ****
+make -j16 all 
+arm-none-eabi-size  F4_bootloader.elf 
+   text	   data	    bss	    dec	    hex	filename
+  21556	    140	   2004	  23700	   5c94	F4_bootloader.elf
+Finished building: default.size.stdout
+ 
+06:42:19 **** Incremental Build of configuration Debug for project F4_bootloader ****
+make -j16 all 
+arm-none-eabi-size  F4_bootloader.elf 
+   text	   data	    bss	    dec	    hex	filename
+  21556	    140	   2004	  23700	   5c94	F4_bootloader.elf
+Finished building: default.size.stdout
+ 
+06:43:53 **** Incremental Build of configuration Debug for project F4_bootloader ****
+make -j16 all 
+arm-none-eabi-gcc "../Core/Src/bootloader.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F401xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/bootloader.d" -MT"Core/Src/bootloader.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/bootloader.o"
+arm-none-eabi-gcc -o "F4_bootloader.elf" @"objects.list"   -mcpu=cortex-m4 -T"D:\F4_bootloader\F4_bootloader\STM32F401RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="F4_bootloader.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: F4_bootloader.elf
+ 
+arm-none-eabi-size  F4_bootloader.elf 
+arm-none-eabi-objdump -h -S F4_bootloader.elf  > "F4_bootloader.list"
+   text	   data	    bss	    dec	    hex	filename
+  21568	    136	   2000	  23704	   5c98	F4_bootloader.elf
+Finished building: default.size.stdout
+ 
+Finished building: F4_bootloader.list
+ 
+06:44:05 **** Incremental Build of configuration Debug for project F4_bootloader ****
+make -j16 all 
+arm-none-eabi-size  F4_bootloader.elf 
+   text	   data	    bss	    dec	    hex	filename
+  21568	    136	   2000	  23704	   5c98	F4_bootloader.elf
+Finished building: default.size.stdout
+ 
+06:53:09 **** Incremental Build of configuration Debug for project F4_bootloader ****
+make -j16 all 
+arm-none-eabi-gcc "../Core/Src/bootloader.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F401xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/bootloader.d" -MT"Core/Src/bootloader.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/bootloader.o"
+arm-none-eabi-gcc -o "F4_bootloader.elf" @"objects.list"   -mcpu=cortex-m4 -T"D:\F4_bootloader\F4_bootloader\STM32F401RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="F4_bootloader.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: F4_bootloader.elf
+ 
+arm-none-eabi-size  F4_bootloader.elf 
+arm-none-eabi-objdump -h -S F4_bootloader.elf  > "F4_bootloader.list"
+   text	   data	    bss	    dec	    hex	filename
+  21568	    136	   2000	  23704	   5c98	F4_bootloader.elf
+Finished building: default.size.stdout
+ 
+Finished building: F4_bootloader.list
+ 
+06:54:30 **** Incremental Build of configuration Debug for project F4_bootloader ****
+make -j16 all 
+arm-none-eabi-size  F4_bootloader.elf 
+   text	   data	    bss	    dec	    hex	filename
+  21568	    136	   2000	  23704	   5c98	F4_bootloader.elf
+Finished building: default.size.stdout
+ 
+06:56:00 **** Incremental Build of configuration Debug for project F4_bootloader ****
+make -j16 all 
+arm-none-eabi-gcc "../Core/Src/bootloader.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F401xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/bootloader.d" -MT"Core/Src/bootloader.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/bootloader.o"
+arm-none-eabi-gcc -o "F4_bootloader.elf" @"objects.list"   -mcpu=cortex-m4 -T"D:\F4_bootloader\F4_bootloader\STM32F401RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="F4_bootloader.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: F4_bootloader.elf
+ 
+arm-none-eabi-size  F4_bootloader.elf 
+arm-none-eabi-objdump -h -S F4_bootloader.elf  > "F4_bootloader.list"
+   text	   data	    bss	    dec	    hex	filename
+  21556	    140	   2004	  23700	   5c94	F4_bootloader.elf
+Finished building: default.size.stdout
+ 
+Finished building: F4_bootloader.list
+ 
+07:00:36 **** Incremental Build of configuration Debug for project F4_bootloader ****
+make -j16 all 
+arm-none-eabi-gcc "../Core/Src/bootloader.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F401xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/bootloader.d" -MT"Core/Src/bootloader.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/bootloader.o"
+arm-none-eabi-gcc -o "F4_bootloader.elf" @"objects.list"   -mcpu=cortex-m4 -T"D:\F4_bootloader\F4_bootloader\STM32F401RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="F4_bootloader.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: F4_bootloader.elf
+ 
+arm-none-eabi-size  F4_bootloader.elf 
+arm-none-eabi-objdump -h -S F4_bootloader.elf  > "F4_bootloader.list"
+   text	   data	    bss	    dec	    hex	filename
+  21536	    140	   2004	  23680	   5c80	F4_bootloader.elf
+Finished building: default.size.stdout
+ 
+Finished building: F4_bootloader.list
+ 
+07:10:40 **** Incremental Build of configuration Debug for project F4_bootloader ****
+make -j16 all 
+arm-none-eabi-gcc "../Core/Src/bootloader.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F401xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/bootloader.d" -MT"Core/Src/bootloader.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/bootloader.o"
+arm-none-eabi-gcc -o "F4_bootloader.elf" @"objects.list"   -mcpu=cortex-m4 -T"D:\F4_bootloader\F4_bootloader\STM32F401RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="F4_bootloader.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: F4_bootloader.elf
+ 
+arm-none-eabi-size  F4_bootloader.elf 
+arm-none-eabi-objdump -h -S F4_bootloader.elf  > "F4_bootloader.list"
+   text	   data	    bss	    dec	    hex	filename
+  21544	    140	   2004	  23688	   5c88	F4_bootloader.elf
+Finished building: default.size.stdout
+ 
+Finished building: F4_bootloader.list
+ 
+07:13:30 **** Incremental Build of configuration Debug for project F4_bootloader ****
+make -j16 all 
+arm-none-eabi-size  F4_bootloader.elf 
+   text	   data	    bss	    dec	    hex	filename
+  21544	    140	   2004	  23688	   5c88	F4_bootloader.elf
+Finished building: default.size.stdout
+ 
+07:16:56 **** Incremental Build of configuration Debug for project F4_bootloader ****
+make -j16 all 
+arm-none-eabi-size  F4_bootloader.elf 
+   text	   data	    bss	    dec	    hex	filename
+  21544	    140	   2004	  23688	   5c88	F4_bootloader.elf
+Finished building: default.size.stdout
+ 
+07:21:34 **** Incremental Build of configuration Debug for project F4_bootloader ****
+make -j16 all 
+arm-none-eabi-gcc "../Core/Src/bootloader.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F401xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/bootloader.d" -MT"Core/Src/bootloader.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/bootloader.o"
+../Core/Src/bootloader.c: In function 'handleWriteData2Memory':
+../Core/Src/bootloader.c:691:1: error: expected declaration or statement at end of input
+  691 | }
+      | ^
+../Core/Src/bootloader.c: At top level:
+../Core/Src/bootloader.c:684:6: warning: 'handleUnKnownCommand' defined but not used [-Wunused-function]
+  684 | void handleUnKnownCommand(void) {
+      |      ^~~~~~~~~~~~~~~~~~~~
+../Core/Src/bootloader.c:676:9: warning: 'calculateCRC' defined but not used [-Wunused-function]
+  676 | uint8_t calculateCRC(char *data, uint16_t startIndex, uint16_t length) {
+      |         ^~~~~~~~~~~~
+../Core/Src/bootloader.c:671:6: warning: 'handleResetOperation' defined but not used [-Wunused-function]
+  671 | void handleResetOperation(void) {
+      |      ^~~~~~~~~~~~~~~~~~~~
+../Core/Src/bootloader.c:661:9: warning: 'verifyAddress' defined but not used [-Wunused-function]
+  661 | uint8_t verifyAddress(uint32_t address) {
+      |         ^~~~~~~~~~~~~
+../Core/Src/bootloader.c:585:19: warning: 'flashWrite' defined but not used [-Wunused-function]
+  585 | HAL_StatusTypeDef flashWrite(uint32_t address, uint8_t *data,
+      |                   ^~~~~~~~~~
+../Core/Src/bootloader.c:542:6: warning: 'handleReadOut_Protect_Unprotect' defined but not used [-Wunused-function]
+  542 | void handleReadOut_Protect_Unprotect(void){
+      |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../Core/Src/bootloader.c:497:6: warning: 'handleWrite_Protect_Unprotect' defined but not used [-Wunused-function]
+  497 | void handleWrite_Protect_Unprotect(void){
+      |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../Core/Src/bootloader.c:413:6: warning: 'handleErase' defined but not used [-Wunused-function]
+  413 | void handleErase(void) {
+      |      ^~~~~~~~~~~
+make: *** [Core/Src/subdir.mk:37: Core/Src/bootloader.o] Error 1
+"make -j16 all" terminated with exit code 2. Build might be incomplete.
+07:22:24 **** Incremental Build of configuration Debug for project F4_bootloader ****
+make -j16 all 
+arm-none-eabi-gcc "../Core/Src/bootloader.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F401xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/bootloader.d" -MT"Core/Src/bootloader.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/bootloader.o"
+arm-none-eabi-gcc -o "F4_bootloader.elf" @"objects.list"   -mcpu=cortex-m4 -T"D:\F4_bootloader\F4_bootloader\STM32F401RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="F4_bootloader.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: F4_bootloader.elf
+ 
+arm-none-eabi-size  F4_bootloader.elf 
+arm-none-eabi-objdump -h -S F4_bootloader.elf  > "F4_bootloader.list"
+   text	   data	    bss	    dec	    hex	filename
+  21404	    140	   2004	  23548	   5bfc	F4_bootloader.elf
+Finished building: default.size.stdout
+ 
+Finished building: F4_bootloader.list
+ 
+07:22:52 **** Incremental Build of configuration Debug for project F4_bootloader ****
+make -j16 all 
+arm-none-eabi-size  F4_bootloader.elf 
+   text	   data	    bss	    dec	    hex	filename
+  21404	    140	   2004	  23548	   5bfc	F4_bootloader.elf
+Finished building: default.size.stdout
+ 
+07:23:21 **** Incremental Build of configuration Debug for project F4_bootloader ****
+make -j16 all 
+arm-none-eabi-size  F4_bootloader.elf 
+   text	   data	    bss	    dec	    hex	filename
+  21404	    140	   2004	  23548	   5bfc	F4_bootloader.elf
+Finished building: default.size.stdout
+ 
+07:25:44 **** Incremental Build of configuration Debug for project F4_bootloader ****
+make -j16 all 
+arm-none-eabi-gcc "../Core/Src/bootloader.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F401xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/bootloader.d" -MT"Core/Src/bootloader.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/bootloader.o"
+arm-none-eabi-gcc -o "F4_bootloader.elf" @"objects.list"   -mcpu=cortex-m4 -T"D:\F4_bootloader\F4_bootloader\STM32F401RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="F4_bootloader.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: F4_bootloader.elf
+ 
+arm-none-eabi-size  F4_bootloader.elf 
+arm-none-eabi-objdump -h -S F4_bootloader.elf  > "F4_bootloader.list"
+   text	   data	    bss	    dec	    hex	filename
+  21652	    140	   2004	  23796	   5cf4	F4_bootloader.elf
+Finished building: default.size.stdout
+ 
+Finished building: F4_bootloader.list
+ 
+07:27:50 **** Incremental Build of configuration Debug for project F4_bootloader ****
+make -j16 all 
+arm-none-eabi-gcc "../Core/Src/bootloader.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F401xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/bootloader.d" -MT"Core/Src/bootloader.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/bootloader.o"
+arm-none-eabi-gcc -o "F4_bootloader.elf" @"objects.list"   -mcpu=cortex-m4 -T"D:\F4_bootloader\F4_bootloader\STM32F401RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="F4_bootloader.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: F4_bootloader.elf
+ 
+arm-none-eabi-size  F4_bootloader.elf 
+arm-none-eabi-objdump -h -S F4_bootloader.elf  > "F4_bootloader.list"
+   text	   data	    bss	    dec	    hex	filename
+  21564	    140	   2004	  23708	   5c9c	F4_bootloader.elf
+Finished building: default.size.stdout
+ 
+Finished building: F4_bootloader.list
+ 
+07:35:23 **** Incremental Build of configuration Debug for project F4_bootloader ****
+make -j16 all 
+arm-none-eabi-gcc "../Core/Src/bootloader.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F401xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/bootloader.d" -MT"Core/Src/bootloader.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/bootloader.o"
+arm-none-eabi-gcc -o "F4_bootloader.elf" @"objects.list"   -mcpu=cortex-m4 -T"D:\F4_bootloader\F4_bootloader\STM32F401RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="F4_bootloader.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: F4_bootloader.elf
+ 
+arm-none-eabi-size  F4_bootloader.elf 
+arm-none-eabi-objdump -h -S F4_bootloader.elf  > "F4_bootloader.list"
+   text	   data	    bss	    dec	    hex	filename
+  21316	    140	   2004	  23460	   5ba4	F4_bootloader.elf
+Finished building: default.size.stdout
+ 
+Finished building: F4_bootloader.list
+ 
+07:39:12 **** Incremental Build of configuration Debug for project F4_bootloader ****
+make -j16 all 
+arm-none-eabi-gcc "../Core/Src/bootloader.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F401xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/bootloader.d" -MT"Core/Src/bootloader.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/bootloader.o"
+arm-none-eabi-gcc -o "F4_bootloader.elf" @"objects.list"   -mcpu=cortex-m4 -T"D:\F4_bootloader\F4_bootloader\STM32F401RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="F4_bootloader.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: F4_bootloader.elf
+ 
+arm-none-eabi-size  F4_bootloader.elf 
+arm-none-eabi-objdump -h -S F4_bootloader.elf  > "F4_bootloader.list"
+   text	   data	    bss	    dec	    hex	filename
+  21316	    140	   2004	  23460	   5ba4	F4_bootloader.elf
+Finished building: default.size.stdout
+ 
+Finished building: F4_bootloader.list
+ 
+07:49:53 **** Incremental Build of configuration Debug for project F4_bootloader ****
+make -j16 all 
+arm-none-eabi-gcc "../Core/Src/bootloader.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F401xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/bootloader.d" -MT"Core/Src/bootloader.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/bootloader.o"
+arm-none-eabi-gcc -o "F4_bootloader.elf" @"objects.list"   -mcpu=cortex-m4 -T"D:\F4_bootloader\F4_bootloader\STM32F401RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="F4_bootloader.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: F4_bootloader.elf
+ 
+arm-none-eabi-size  F4_bootloader.elf 
+arm-none-eabi-objdump -h -S F4_bootloader.elf  > "F4_bootloader.list"
+   text	   data	    bss	    dec	    hex	filename
+  21316	    140	   2004	  23460	   5ba4	F4_bootloader.elf
+Finished building: default.size.stdout
+ 
+Finished building: F4_bootloader.list
+ 
+07:58:52 **** Incremental Build of configuration Debug for project F4_bootloader ****
+make -j16 all 
+arm-none-eabi-size  F4_bootloader.elf 
+   text	   data	    bss	    dec	    hex	filename
+  21316	    140	   2004	  23460	   5ba4	F4_bootloader.elf
+Finished building: default.size.stdout
+ 
+07:59:06 **** Incremental Build of configuration Debug for project F4_bootloader ****
+make -j16 all 
+arm-none-eabi-size  F4_bootloader.elf 
+   text	   data	    bss	    dec	    hex	filename
+  21316	    140	   2004	  23460	   5ba4	F4_bootloader.elf
+Finished building: default.size.stdout
+ 
+07:59:32 **** Incremental Build of configuration Debug for project F4_bootloader ****
+make -j16 all 
+arm-none-eabi-size  F4_bootloader.elf 
+   text	   data	    bss	    dec	    hex	filename
+  21316	    140	   2004	  23460	   5ba4	F4_bootloader.elf
+Finished building: default.size.stdout
+ 
+08:01:48 **** Incremental Build of configuration Debug for project F4_bootloader ****
+make -j16 all 
+arm-none-eabi-size  F4_bootloader.elf 
+   text	   data	    bss	    dec	    hex	filename
+  21316	    140	   2004	  23460	   5ba4	F4_bootloader.elf
+Finished building: default.size.stdout
+ 
+08:21:15 **** Incremental Build of configuration Debug for project F4_bootloader ****
+make -j16 all 
+arm-none-eabi-size  F4_bootloader.elf 
+   text	   data	    bss	    dec	    hex	filename
+  21316	    140	   2004	  23460	   5ba4	F4_bootloader.elf
+Finished building: default.size.stdout
+ 
+08:22:30 **** Incremental Build of configuration Debug for project F4_bootloader ****
+make -j16 all 
+arm-none-eabi-size  F4_bootloader.elf 
+   text	   data	    bss	    dec	    hex	filename
+  21316	    140	   2004	  23460	   5ba4	F4_bootloader.elf
+Finished building: default.size.stdout
+ 
+08:29:32 **** Incremental Build of configuration Debug for project F4_bootloader ****
+make -j16 all 
+arm-none-eabi-size  F4_bootloader.elf 
+   text	   data	    bss	    dec	    hex	filename
+  21316	    140	   2004	  23460	   5ba4	F4_bootloader.elf
+Finished building: default.size.stdout
+ 
+08:34:56 **** Incremental Build of configuration Debug for project F4_bootloader ****
+make -j16 all 
+arm-none-eabi-size  F4_bootloader.elf 
+   text	   data	    bss	    dec	    hex	filename
+  21316	    140	   2004	  23460	   5ba4	F4_bootloader.elf
+Finished building: default.size.stdout
+ 
+09:12:40 **** Incremental Build of configuration Debug for project F4_bootloader ****
+make -j16 all 
+arm-none-eabi-size  F4_bootloader.elf 
+   text	   data	    bss	    dec	    hex	filename
+  21316	    140	   2004	  23460	   5ba4	F4_bootloader.elf
+Finished building: default.size.stdout
+ 
+09:31:34 **** Incremental Build of configuration Debug for project F4_bootloader ****
+make -j16 all 
+arm-none-eabi-gcc "../Core/Src/bootloader.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F401xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/bootloader.d" -MT"Core/Src/bootloader.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/bootloader.o"
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F401xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/bootloader.c: In function 'processBootloaderCommand':
+../Core/Src/bootloader.c:49:19: error: expected expression before ':' token
+   49 |         case RESET:
+      |                   ^
+make: *** [Core/Src/subdir.mk:37: Core/Src/bootloader.o] Error 1
+make: *** Waiting for unfinished jobs....
+"make -j16 all" terminated with exit code 2. Build might be incomplete.
+09:32:47 **** Incremental Build of configuration Debug for project F4_bootloader ****
+make -j16 all 
+arm-none-eabi-gcc "../Core/Src/bootloader.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F401xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/bootloader.d" -MT"Core/Src/bootloader.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/bootloader.o"
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F401xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "F4_bootloader.elf" @"objects.list"   -mcpu=cortex-m4 -T"D:\F4_bootloader\F4_bootloader\STM32F401RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="F4_bootloader.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: F4_bootloader.elf
+ 
+arm-none-eabi-size  F4_bootloader.elf 
+arm-none-eabi-objdump -h -S F4_bootloader.elf  > "F4_bootloader.list"
+   text	   data	    bss	    dec	    hex	filename
+  21408	    140	   2004	  23552	   5c00	F4_bootloader.elf
+Finished building: default.size.stdout
+ 
+Finished building: F4_bootloader.list
+ 
+09:34:01 **** Incremental Build of configuration Debug for project F4_bootloader ****
+make -j16 all 
+arm-none-eabi-size  F4_bootloader.elf 
+   text	   data	    bss	    dec	    hex	filename
+  21408	    140	   2004	  23552	   5c00	F4_bootloader.elf
+Finished building: default.size.stdout
+ 
+09:46:50 **** Incremental Build of configuration Debug for project F4_bootloader ****
+make -j16 all 
+arm-none-eabi-size  F4_bootloader.elf 
+   text	   data	    bss	    dec	    hex	filename
+  21408	    140	   2004	  23552	   5c00	F4_bootloader.elf
+Finished building: default.size.stdout
+ 
+09:51:38 **** Incremental Build of configuration Debug for project F4_bootloader ****
+make -j16 all 
+arm-none-eabi-size  F4_bootloader.elf 
+   text	   data	    bss	    dec	    hex	filename
+  21408	    140	   2004	  23552	   5c00	F4_bootloader.elf
+Finished building: default.size.stdout
+ 
+09:58:50 **** Incremental Build of configuration Debug for project F4_bootloader ****
+make -j16 all 
+arm-none-eabi-size  F4_bootloader.elf 
+   text	   data	    bss	    dec	    hex	filename
+  21408	    140	   2004	  23552	   5c00	F4_bootloader.elf
+Finished building: default.size.stdout
+ 
+10:04:42 **** Incremental Build of configuration Debug for project F4_bootloader ****
+make -j16 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F401xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'JumpToApp':
+../Core/Src/main.c:80:9: error: 'uint32_tAPP_STACK_POINTER' undeclared (first use in this function); did you mean 'APP_STACK_POINTER'?
+   80 |         uint32_tAPP_STACK_POINTER = *(__IO uint32_t*) startAddress;
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+      |         APP_STACK_POINTER
+../Core/Src/main.c:80:9: note: each undeclared identifier is reported only once for each function it appears in
+../Core/Src/main.c:81:9: error: 'uint32_tAPP_RESET_HANDLER' undeclared (first use in this function); did you mean 'APP_RESET_HANDLER'?
+   81 |         uint32_tAPP_RESET_HANDLER = *(__IO uint32_t*) (startAddress + 4);
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+      |         APP_RESET_HANDLER
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:155:17: error: too few arguments to function 'JumpToApp'
+  155 |                 JumpToApp();
+      |                 ^~~~~~~~~
+../Core/Src/main.c:78:6: note: declared here
+   78 | void JumpToApp(uint32_t startAddress){
+      |      ^~~~~~~~~
+make: *** [Core/Src/subdir.mk:37: Core/Src/main.o] Error 1
+"make -j16 all" terminated with exit code 2. Build might be incomplete.
+10:06:41 **** Incremental Build of configuration Debug for project F4_bootloader ****
+make -j16 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F401xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'JumpToApp':
+../Core/Src/main.c:80:9: error: 'uint32_tAPP_STACK_POINTER' undeclared (first use in this function); did you mean 'APP_STACK_POINTER'?
+   80 |         uint32_tAPP_STACK_POINTER = *(__IO uint32_t*) startAddress;
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+      |         APP_STACK_POINTER
+../Core/Src/main.c:80:9: note: each undeclared identifier is reported only once for each function it appears in
+../Core/Src/main.c:81:9: error: 'uint32_tAPP_RESET_HANDLER' undeclared (first use in this function); did you mean 'APP_RESET_HANDLER'?
+   81 |         uint32_tAPP_RESET_HANDLER = *(__IO uint32_t*) (startAddress + 4);
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+      |         APP_RESET_HANDLER
+make: *** [Core/Src/subdir.mk:37: Core/Src/main.o] Error 1
+"make -j16 all" terminated with exit code 2. Build might be incomplete.
+10:06:59 **** Incremental Build of configuration Debug for project F4_bootloader ****
+make -j16 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F401xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+In file included from ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f401xe.h:139,
+                 from ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h:146,
+                 from ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h:29,
+                 from ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h:27,
+                 from ../Core/Inc/stm32f4xx_hal_conf.h:275,
+                 from ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:29,
+                 from ../Core/Inc/main.h:30,
+                 from ../Core/Src/main.c:20:
+../Core/Src/main.c: In function 'JumpToApp':
+../Drivers/CMSIS/Include/core_cm4.h:227:21: error: expected identifier or '(' before 'volatile'
+  227 | #define     __IO    volatile             /*!< Defines 'read / write' permissions */
+      |                     ^~~~~~~~
+../Core/Src/main.c:37:43: note: in expansion of macro '__IO'
+   37 | #define APP_STACK_POINTER               *(__IO uint32_t*)APP_START_ADDRESS
+      |                                           ^~~~
+../Core/Src/main.c:80:18: note: in expansion of macro 'APP_STACK_POINTER'
+   80 |         uint32_t APP_STACK_POINTER = *(__IO uint32_t*) startAddress;
+      |                  ^~~~~~~~~~~~~~~~~
+../Drivers/CMSIS/Include/core_cm4.h:227:21: error: expected identifier or '(' before 'volatile'
+  227 | #define     __IO    volatile             /*!< Defines 'read / write' permissions */
+      |                     ^~~~~~~~
+../Core/Src/main.c:38:43: note: in expansion of macro '__IO'
+   38 | #define APP_RESET_HANDLER               *(__IO uint32_t*)(APP_START_ADDRESS+4)
+      |                                           ^~~~
+../Core/Src/main.c:81:18: note: in expansion of macro 'APP_RESET_HANDLER'
+   81 |         uint32_t APP_RESET_HANDLER = *(__IO uint32_t*) (startAddress + 4);
+      |                  ^~~~~~~~~~~~~~~~~
+make: *** [Core/Src/subdir.mk:37: Core/Src/main.o] Error 1
+"make -j16 all" terminated with exit code 2. Build might be incomplete.
+10:07:28 **** Incremental Build of configuration Debug for project F4_bootloader ****
+make -j16 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F401xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'JumpToApp':
+../Core/Src/main.c:80:9: error: 'uint32_tAPP_STACK_POINTER' undeclared (first use in this function); did you mean 'APP_STACK_POINTER'?
+   80 |         uint32_tAPP_STACK_POINTER = *(__IO uint32_t*) startAddress;
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+      |         APP_STACK_POINTER
+../Core/Src/main.c:80:9: note: each undeclared identifier is reported only once for each function it appears in
+../Core/Src/main.c:81:9: error: 'uint32_tAPP_RESET_HANDLER' undeclared (first use in this function); did you mean 'APP_RESET_HANDLER'?
+   81 |         uint32_tAPP_RESET_HANDLER = *(__IO uint32_t*) (startAddress + 4);
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+      |         APP_RESET_HANDLER
+make: *** [Core/Src/subdir.mk:37: Core/Src/main.o] Error 1
+"make -j16 all" terminated with exit code 2. Build might be incomplete.
+10:08:52 **** Incremental Build of configuration Debug for project F4_bootloader ****
+make -j16 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F401xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+In file included from ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f401xe.h:139,
+                 from ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h:146,
+                 from ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h:29,
+                 from ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h:27,
+                 from ../Core/Inc/stm32f4xx_hal_conf.h:275,
+                 from ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:29,
+                 from ../Core/Inc/main.h:30,
+                 from ../Core/Src/main.c:20:
+../Core/Src/main.c: In function 'JumpToApp':
+../Drivers/CMSIS/Include/core_cm4.h:227:21: error: expected identifier or '(' before 'volatile'
+  227 | #define     __IO    volatile             /*!< Defines 'read / write' permissions */
+      |                     ^~~~~~~~
+../Core/Src/main.c:37:43: note: in expansion of macro '__IO'
+   37 | #define APP_STACK_POINTER               *(__IO uint32_t*)APP_START_ADDRESS
+      |                                           ^~~~
+../Core/Src/main.c:80:18: note: in expansion of macro 'APP_STACK_POINTER'
+   80 |         uint32_t APP_STACK_POINTER = *(__IO uint32_t*) startAddress;
+      |                  ^~~~~~~~~~~~~~~~~
+../Drivers/CMSIS/Include/core_cm4.h:227:21: error: expected identifier or '(' before 'volatile'
+  227 | #define     __IO    volatile             /*!< Defines 'read / write' permissions */
+      |                     ^~~~~~~~
+../Core/Src/main.c:38:43: note: in expansion of macro '__IO'
+   38 | #define APP_RESET_HANDLER               *(__IO uint32_t*)(APP_START_ADDRESS+4)
+      |                                           ^~~~
+../Core/Src/main.c:81:18: note: in expansion of macro 'APP_RESET_HANDLER'
+   81 |         uint32_t APP_RESET_HANDLER = *(__IO uint32_t*) (startAddress + 4);
+      |                  ^~~~~~~~~~~~~~~~~
+make: *** [Core/Src/subdir.mk:37: Core/Src/main.o] Error 1
+"make -j16 all" terminated with exit code 2. Build might be incomplete.
+10:10:23 **** Incremental Build of configuration Debug for project F4_bootloader ****
+make -j16 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F401xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+In file included from ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f401xe.h:139,
+                 from ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h:146,
+                 from ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h:29,
+                 from ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h:27,
+                 from ../Core/Inc/stm32f4xx_hal_conf.h:275,
+                 from ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:29,
+                 from ../Core/Inc/main.h:30,
+                 from ../Core/Src/main.c:20:
+../Core/Src/main.c: In function 'JumpToApp':
+../Drivers/CMSIS/Include/core_cm4.h:227:21: error: expected identifier or '(' before 'volatile'
+  227 | #define     __IO    volatile             /*!< Defines 'read / write' permissions */
+      |                     ^~~~~~~~
+../Core/Src/main.c:37:43: note: in expansion of macro '__IO'
+   37 | #define APP_STACK_POINTER               *(__IO uint32_t*)APP_START_ADDRESS
+      |                                           ^~~~
+../Core/Src/main.c:80:18: note: in expansion of macro 'APP_STACK_POINTER'
+   80 |         uint32_t APP_STACK_POINTER = *(__IO uint32_t*) startAddress;
+      |                  ^~~~~~~~~~~~~~~~~
+../Drivers/CMSIS/Include/core_cm4.h:227:21: error: expected identifier or '(' before 'volatile'
+  227 | #define     __IO    volatile             /*!< Defines 'read / write' permissions */
+      |                     ^~~~~~~~
+../Core/Src/main.c:38:43: note: in expansion of macro '__IO'
+   38 | #define APP_RESET_HANDLER               *(__IO uint32_t*)(APP_START_ADDRESS+4)
+      |                                           ^~~~
+../Core/Src/main.c:81:18: note: in expansion of macro 'APP_RESET_HANDLER'
+   81 |         uint32_t APP_RESET_HANDLER = *(__IO uint32_t*) (startAddress + 4);
+      |                  ^~~~~~~~~~~~~~~~~
+make: *** [Core/Src/subdir.mk:37: Core/Src/main.o] Error 1
+"make -j16 all" terminated with exit code 2. Build might be incomplete.
+10:11:49 **** Incremental Build of configuration Debug for project F4_bootloader ****
+make -j16 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F401xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "F4_bootloader.elf" @"objects.list"   -mcpu=cortex-m4 -T"D:\F4_bootloader\F4_bootloader\STM32F401RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="F4_bootloader.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: F4_bootloader.elf
+ 
+arm-none-eabi-size  F4_bootloader.elf 
+arm-none-eabi-objdump -h -S F4_bootloader.elf  > "F4_bootloader.list"
+   text	   data	    bss	    dec	    hex	filename
+  21976	    140	   2004	  24120	   5e38	F4_bootloader.elf
+Finished building: default.size.stdout
+ 
+Finished building: F4_bootloader.list
+ 
+10:11:52 **** Incremental Build of configuration Debug for project F4_bootloader ****
+make -j16 all 
+arm-none-eabi-size  F4_bootloader.elf 
+   text	   data	    bss	    dec	    hex	filename
+  21976	    140	   2004	  24120	   5e38	F4_bootloader.elf
+Finished building: default.size.stdout
+ 
+10:14:29 **** Incremental Build of configuration Debug for project F4_bootloader ****
+make -j16 all 
+arm-none-eabi-size  F4_bootloader.elf 
+   text	   data	    bss	    dec	    hex	filename
+  21976	    140	   2004	  24120	   5e38	F4_bootloader.elf
+Finished building: default.size.stdout
+ 

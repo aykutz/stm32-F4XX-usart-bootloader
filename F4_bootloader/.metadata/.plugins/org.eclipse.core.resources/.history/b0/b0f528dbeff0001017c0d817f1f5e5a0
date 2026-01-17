@@ -1,0 +1,13 @@
+/*
+ * bootloader.h
+ *
+ *  Created on: Jan 14, 2026
+ *      Author: huse2
+ */
+
+#ifndef INC_BOOTLOADER_H_
+#define INC_BOOTLOADER_H_
+
+#include "main.h"
+
+#endif /* INC_BOOTLOADER_H_ */
