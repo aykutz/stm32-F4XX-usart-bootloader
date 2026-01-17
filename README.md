@@ -1,6 +1,13 @@
-# Don't pass without reading
 
-The project consists of four parts.
+
+Silicon Room Project Video -> 
+
+
+You can reach me through my YouTube channel.
+
+
+
+# Don't pass without reading
 
 -> F4_application (main.c and main.h):
 This is the application that runs on the MCU in Sectors 2 to 7. It contains the main functions of the MCU. In this project, a LED blink operation is implemented.
@@ -12,8 +19,15 @@ This is the bootloader that runs in Sector 0 and Sector 1. In this project, the 
 -> stm32F4programmer (UI):
 This contains the files of the user interface developed in Visual Studio. Operations such as memory write, memory read, write protection, and read protection can be performed through this interface.
 
--> programSetup:
-This folder provides access to the Visual Studio application. The executable (.exe) file of the application is located here.
+-> Download to stm32F4Programmer.exe: 
+You can access the program from the ‘Tags’ section above. When you click on v1.0.0, the .exe and .pdb files will be visible.
+
+
+<img width="856" height="503" alt="program" src="https://github.com/user-attachments/assets/3f84b02c-bdde-4688-a46a-62443031a148" />
+
+
+
+
 
 # Problems encountered during the project
 
@@ -30,8 +44,3 @@ Otherwise, you will always see 1F in the output section, which means “NACK”.
 
 79 means “ACK”. If you perform any operation correctly, you will see 79 on the screen.
 For example, if you select Full Chip Erase and press the Erase button, and the operation is completed successfully, you will see 79 on the screen. This shows that the operation has been completed.
-
-
-
-
-
